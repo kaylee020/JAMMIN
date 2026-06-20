@@ -1,0 +1,1121 @@
+﻿	<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>성화관할서 미스터리 수사반</title>
+<style>
+:root {
+--ink: #eef6ee;
+--muted: #9fb0aa;
+--paper: #0b1012;
+--panel: #121b1f;
+--line: #d7f6dd;
+--red: #b9322f;
+--teal: #1e6c73;
+--gold: #d39a28;
+--green: #587b44;
+--blue: #365e9c;
+--shadow: 6px 6px 0 rgba(215, 246, 221, 0.12);
+}
+
+* {
+box-sizing: border-box;
+}
+
+body {
+margin: 0;
+min-height: 100vh;
+color: var(--ink);
+font-family: "Pretendard", "SUIT", "Noto Sans KR", "Malgun Gothic", "Apple SD Gothic Neo", Arial, sans-serif;
+background:
+linear-gradient(rgba(11, 16, 18, 0.9), rgba(11, 16, 18, 0.94)),
+repeating-linear-gradient(0deg, transparent 0 28px, rgba(215, 246, 221, 0.05) 29px 30px),
+radial-gradient(circle at 20% 0%, rgba(179, 50, 47, 0.18), transparent 34%),
+radial-gradient(circle at 78% 18%, rgba(30, 108, 115, 0.22), transparent 36%),
+#070b0d;
+letter-spacing: 0;
+}
+
+button {
+font: inherit;
+}
+
+body.modal-open {
+overflow: hidden;
+}
+
+.site-shell {
+width: min(1180px, calc(100% - 32px));
+margin: 0 auto;
+padding: 28px 0 40px;
+}
+
+.hero {
+min-height: 52vh;
+display: grid;
+grid-template-columns: minmax(0, 1fr) minmax(320px, 460px);
+align-items: stretch;
+gap: 22px;
+padding-bottom: 26px;
+}
+
+.hero-copy {
+display: flex;
+flex-direction: column;
+justify-content: center;
+padding: 28px 0;
+}
+
+.case-label {
+width: fit-content;
+margin: 0 0 16px;
+padding: 8px 13px;
+color: #fff8e7;
+background: var(--red);
+border: 2px solid var(--line);
+box-shadow: 3px 3px 0 rgba(30, 35, 40, 0.25);
+font-size: 0.9rem;
+font-weight: 800;
+}
+
+h1 {
+margin: 0;
+max-width: 760px;
+font-family: "Batang", "Nanum Myeongjo", "Noto Serif KR", serif;
+font-weight: 900;
+font-size: clamp(2.45rem, 6vw, 5.4rem);
+line-height: 0.95;
+letter-spacing: 0;
+}
+
+.subtitle {
+max-width: 680px;
+margin: 20px 0 0;
+color: var(--muted);
+font-size: clamp(1rem, 2vw, 1.2rem);
+line-height: 1.75;
+}
+
+.hero-board {
+position: relative;
+overflow: hidden;
+min-height: 380px;
+border: 3px solid var(--line);
+background:
+linear-gradient(90deg, rgba(255, 248, 231, 0.08) 1px, transparent 1px) 0 0 / 28px 28px,
+linear-gradient(rgba(255, 248, 231, 0.08) 1px, transparent 1px) 0 0 / 28px 28px,
+linear-gradient(145deg, #142126, #2d3339 58%, #5b362f);
+box-shadow: var(--shadow), inset 0 0 40px rgba(0, 0, 0, 0.38);
+}
+
+.hero-board::before {
+content: "Unit Database";
+position: absolute;
+left: 18px;
+top: 16px;
+z-index: 2;
+padding: 6px 10px;
+color: #d7f6dd;
+border: 1px solid rgba(215, 246, 221, 0.5);
+background: rgba(10, 17, 19, 0.76);
+font-size: 0.78rem;
+font-weight: 900;
+letter-spacing: 0.08em;
+}
+
+.photo-strip {
+position: absolute;
+inset: 58px 20px 22px;
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 10px;
+transform: none;
+}
+
+.mini-photo span {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 6px;
+  color: #ffffff; /* ← 기존 #d7f6dd 대신 원하는 색상 코드로 변경 (예: 주황/골드 계열 #ffaa00 또는 흰색 #ffffff) */
+  background: linear-gradient(transparent, rgba(8, 13, 15, 0.92) 35%);
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-align: center;
+}
+
+.mini-photo img {
+width: 100%;
+height: 100%;
+display: block;
+object-fit: cover;
+filter: saturate(0.88) contrast(1.08);
+}
+
+.mini-photo span {
+position: absolute;
+left: 0;
+right: 0;
+bottom: 0;
+padding: 6px;
+color: #d7f6dd;
+background: linear-gradient(transparent, rgba(8, 13, 15, 0.92) 35%);
+font-size: 0.78rem;
+font-weight: 900;
+text-align: center;
+}
+
+.case-stamp {
+position: absolute;
+right: 18px;
+top: 16px;
+width: auto;
+padding: 7px 10px;
+color: #101719;
+border: 0;
+transform: none;
+font-weight: 900;
+font-size: 0.78rem;
+letter-spacing: 0.08em;
+background: #d7f6dd;
+}
+
+.tabs {
+position: sticky;
+top: 0;
+z-index: 10;
+display: flex;
+gap: 8px;
+padding: 10px 0 14px;
+background: linear-gradient(rgba(11, 16, 18, 0.96), rgba(11, 16, 18, 0.82));
+backdrop-filter: blur(8px);
+}
+
+.tab-button {
+min-height: 42px;
+padding: 0 16px;
+border: 2px solid var(--line);
+color: var(--ink);
+background: rgba(18, 27, 31, 0.96);
+box-shadow: 3px 3px 0 rgba(215, 246, 221, 0.14);
+cursor: pointer;
+font-weight: 800;
+}
+
+.tab-button[aria-selected="true"] {
+color: #071012;
+background: var(--line);
+}
+
+.tab-panel {
+display: none;
+padding-top: 16px;
+}
+
+.tab-panel.active {
+display: block;
+}
+
+.section-title {
+display: flex;
+align-items: end;
+justify-content: space-between;
+gap: 16px;
+margin: 0 0 18px;
+border-bottom: 3px solid var(--line);
+padding-bottom: 10px;
+}
+
+.section-title h2 {
+margin: 0;
+font-family: "Batang", "Nanum Myeongjo", "Noto Serif KR", serif;
+font-weight: 900;
+font-size: clamp(1.6rem, 3vw, 2.35rem);
+}
+
+.section-title p {
+margin: 0;
+color: var(--muted);
+line-height: 1.55;
+text-align: right;
+}
+
+.member-layout {
+display: block;
+}
+
+.member-list {
+display: grid;
+grid-template-columns: repeat(3, minmax(0, 1fr));
+gap: 16px;
+}
+
+.member-card {
+display: grid;
+grid-template-rows: minmax(220px, 1fr) auto auto;
+gap: 10px;
+align-items: stretch;
+width: 100%;
+min-height: 350px;
+padding: 12px;
+border: 2px solid var(--line);
+background: var(--panel);
+box-shadow: 3px 3px 0 rgba(215, 246, 221, 0.12);
+cursor: pointer;
+text-align: left;
+}
+
+.member-card.active {
+outline: 4px solid var(--gold);
+background: #182529;
+transform: translate(-2px, -2px);
+}
+
+.avatar {
+position: relative;
+overflow: hidden;
+width: 100%;
+min-height: 220px;
+aspect-ratio: 4 / 5;
+border: 2px solid var(--line);
+background:
+radial-gradient(circle at 50% 27%, #e0af74 0 17%, transparent 18%),
+radial-gradient(circle at 43% 26%, var(--eye, #151515) 0 3px, transparent 4px),
+radial-gradient(circle at 57% 26%, var(--eye, #151515) 0 3px, transparent 4px),
+linear-gradient(var(--hair, #4a2b1e) 0 48%, transparent 49%),
+linear-gradient(160deg, var(--accent), #f6e8c3);
+}
+
+.avatar.has-image {
+background: #0b1012;
+}
+
+.avatar img,
+.portrait img {
+position: absolute;
+inset: 0;
+width: 100%;
+height: 100%;
+object-fit: cover;
+}
+
+.avatar::after {
+content: "";
+position: absolute;
+left: 22%;
+right: 22%;
+bottom: 10%;
+height: 30%;
+border-radius: 50% 50% 45% 45%;
+background: var(--coat, #334155);
+border: 2px solid rgba(30, 35, 40, 0.5);
+}
+
+.avatar.has-image::after,
+.avatar.has-image.rabbit::before,
+.portrait.has-image::after,
+.portrait.has-image.rabbit::before {
+display: none;
+}
+
+.rabbit::before {
+content: "";
+position: absolute;
+left: 31%;
+top: -4%;
+width: 10%;
+height: 22%;
+border: 2px solid var(--line);
+border-radius: 50%;
+background: #f5ead2;
+box-shadow: 72px 0 0 #f5ead2, 72px 0 0 2px var(--line);
+transform: rotate(-8deg);
+}
+
+.member-name {
+display: block;
+margin-bottom: 4px;
+font-size: clamp(1.35rem, 3vw, 1.8rem);
+font-weight: 900;
+text-align: center;
+}
+
+.member-summary {
+display: block;
+color: var(--muted);
+min-height: 48px;
+font-size: 0.94rem;
+font-weight: 700;
+line-height: 1.55;
+text-align: center;
+word-break: keep-all;
+}
+
+.arrow {
+display: none;
+width: 34px;
+height: 34px;
+place-items: center;
+border: 2px solid var(--line);
+background: #fff;
+font-weight: 900;
+}
+
+.detail {
+display: none;
+position: fixed;
+inset: 0;
+z-index: 100;
+overflow: auto;
+padding: clamp(18px, 4vw, 44px);
+background:
+radial-gradient(circle at 18% 22%, rgba(179, 50, 47, 0.22), transparent 34%),
+radial-gradient(circle at 82% 78%, rgba(30, 108, 115, 0.2), transparent 30%),
+rgba(9, 10, 11, 0.84);
+backdrop-filter: blur(4px);
+}
+
+.detail.open {
+display: grid;
+place-items: center;
+}
+
+.case-file {
+position: relative;
+width: min(1120px, 100%);
+min-height: min(740px, calc(100vh - 48px));
+display: grid;
+grid-template-columns: minmax(290px, 42%) minmax(0, 1fr);
+border: 3px solid var(--line);
+background:
+linear-gradient(90deg, rgba(255, 248, 231, 0.04) 1px, transparent 1px) 0 0 / 22px 22px,
+linear-gradient(rgba(255, 248, 231, 0.04) 1px, transparent 1px) 0 0 / 22px 22px,
+#172226;
+box-shadow: 0 28px 80px rgba(0, 0, 0, 0.58);
+}
+
+.case-file::before {
+content: "";
+position: absolute;
+inset: 14px;
+border: 1px solid rgba(215, 246, 221, 0.22);
+pointer-events: none;
+}
+
+.file-close {
+position: absolute;
+top: 14px;
+right: 14px;
+z-index: 3;
+width: 42px;
+height: 42px;
+display: grid;
+place-items: center;
+border: 1px solid rgba(215, 246, 221, 0.4);
+color: #d7f6dd;
+background: rgba(9, 10, 11, 0.42);
+cursor: pointer;
+font-size: 2rem;
+font-weight: 900;
+line-height: 1;
+}
+
+.file-photo-panel {
+position: relative;
+display: grid;
+align-content: stretch;
+padding: clamp(18px, 3vw, 30px);
+border-right: 3px solid rgba(215, 246, 221, 0.18);
+background:
+linear-gradient(180deg, rgba(215, 246, 221, 0.08), transparent 38%),
+#101719;
+}
+
+.photo-frame {
+position: relative;
+width: 100%;
+min-height: 560px;
+margin: 0;
+padding: 0;
+overflow: hidden;
+border: 2px solid rgba(215, 246, 221, 0.36);
+background: #0b1012;
+box-shadow: inset 0 0 36px rgba(0, 0, 0, 0.5);
+transform: none;
+}
+
+.photo-frame::before {
+content: "";
+position: absolute;
+inset: 0;
+z-index: 1;
+background:
+linear-gradient(rgba(215, 246, 221, 0.08) 1px, transparent 1px) 0 0 / 100% 5px,
+linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+mix-blend-mode: screen;
+pointer-events: none;
+}
+
+.photo-name {
+position: absolute;
+left: 14px;
+bottom: 14px;
+z-index: 2;
+display: block;
+padding: 8px 12px;
+color: #101719;
+background: #d7f6dd;
+font-family: "Pretendard", "SUIT", "Noto Sans KR", "Malgun Gothic", sans-serif;
+font-size: 1.05rem;
+font-weight: 900;
+}
+
+.evidence-number {
+margin: 16px 0 0;
+padding: 12px;
+border: 1px solid rgba(215, 246, 221, 0.28);
+color: #d7f6dd;
+background: rgba(215, 246, 221, 0.06);
+font-family: "Pretendard", "SUIT", "Noto Sans KR", "Malgun Gothic", sans-serif;
+font-size: clamp(1rem, 2vw, 1.25rem);
+font-weight: 900;
+letter-spacing: 0.08em;
+}
+
+.file-info-panel {
+position: relative;
+padding: clamp(24px, 4vw, 48px);
+background:
+linear-gradient(135deg, rgba(215, 246, 221, 0.09), transparent 36%),
+#121b1f;
+color: var(--ink);
+}
+
+.file-info-panel::before {
+content: "";
+position: absolute;
+left: 0;
+right: 0;
+top: 0;
+height: 12px;
+background: linear-gradient(90deg, var(--accent), var(--red), var(--teal));
+box-shadow: none;
+}
+
+.secret-stamp {
+position: absolute;
+top: 28px;
+right: 70px;
+padding: 7px 12px;
+border: 2px solid var(--line);
+color: #fff8e7;
+background: #223036;
+font-family: "Pretendard", "SUIT", "Noto Sans KR", "Malgun Gothic", sans-serif;
+font-weight: 900;
+letter-spacing: 0.06em;
+transform: none;
+}
+
+.detail-header {
+padding: 0 56px 18px 0;
+border-bottom: 3px solid var(--line);
+background: transparent;
+}
+
+.portrait {
+position: relative;
+overflow: hidden;
+min-height: 100%;
+border: 0;
+background:
+radial-gradient(circle at 50% 24%, #e3b176 0 16%, transparent 17%),
+radial-gradient(circle at 43% 24%, var(--eye, #151515) 0 4px, transparent 5px),
+radial-gradient(circle at 57% 24%, var(--eye, #151515) 0 4px, transparent 5px),
+linear-gradient(var(--hair, #4a2b1e) 0 43%, transparent 44%),
+linear-gradient(160deg, rgba(255, 255, 255, 0.28), transparent 45%),
+var(--accent);
+box-shadow: none;
+}
+
+.portrait::after {
+content: "";
+position: absolute;
+left: 42px;
+right: 42px;
+bottom: 32px;
+height: 82px;
+background: var(--coat, #263445);
+border: 3px solid var(--line);
+border-radius: 40% 40% 8px 8px;
+}
+
+.portrait.rabbit::before {
+left: 47px;
+top: -18px;
+width: 18px;
+height: 58px;
+box-shadow: 48px 0 0 #f5ead2, 48px 0 0 3px var(--line);
+}
+
+.badge-line {
+margin: 0 0 8px;
+font-weight: 900;
+color: var(--muted);
+text-shadow: none;
+}
+
+.detail h3 {
+margin: 0;
+font-family: "Batang", "Nanum Myeongjo", "Noto Serif KR", serif;
+font-weight: 900;
+font-size: clamp(2rem, 5vw, 4rem);
+line-height: 0.98;
+}
+
+.tags {
+display: flex;
+flex-wrap: wrap;
+gap: 7px;
+margin-top: 14px;
+}
+
+.tag {
+padding: 6px 9px;
+border: 2px solid var(--line);
+color: #071012;
+background: var(--line);
+font-size: 0.9rem;
+font-weight: 800;
+}
+
+.detail-body {
+display: grid;
+grid-template-columns: repeat(2, minmax(0, 1fr));
+gap: 14px 30px;
+padding: 22px 0 0;
+}
+
+.fact {
+min-height: 92px;
+padding: 0 0 11px;
+border: 0;
+border-bottom: 1px solid rgba(215, 246, 221, 0.18);
+background: transparent;
+}
+
+.fact.wide {
+grid-column: 1 / -1;
+padding: 18px;
+border: 1px solid rgba(215, 246, 221, 0.18);
+background: rgba(215, 246, 221, 0.06);
+box-shadow: inset 0 0 16px rgba(0, 0, 0, 0.18);
+}
+
+.fact-label {
+display: block;
+margin-bottom: 7px;
+color: var(--red);
+font-size: 0.82rem;
+font-weight: 900;
+letter-spacing: 0.05em;
+}
+
+.fact-value {
+margin: 0;
+font-weight: 650;
+line-height: 1.65;
+word-break: keep-all;
+}
+
+.empty-panel {
+min-height: 330px;
+display: grid;
+place-items: center;
+padding: 28px;
+border: 3px solid var(--line);
+background:
+linear-gradient(90deg, rgba(215, 246, 221, 0.05) 1px, transparent 1px) 0 0 / 28px 28px,
+linear-gradient(rgba(215, 246, 221, 0.05) 1px, transparent 1px) 0 0 / 28px 28px,
+var(--panel);
+box-shadow: var(--shadow);
+text-align: center;
+}
+
+.empty-panel strong {
+display: block;
+margin-bottom: 8px;
+font-size: clamp(1.5rem, 3vw, 2.3rem);
+}
+
+.empty-panel span {
+color: var(--muted);
+line-height: 1.65;
+}
+
+.music-heading {
+margin-top: 28px;
+}
+
+.music-link {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+min-height: 44px;
+margin-top: 18px;
+padding: 0 18px;
+color: #071012;
+background: var(--line);
+border: 2px solid var(--line);
+box-shadow: 4px 4px 0 rgba(215, 246, 221, 0.16);
+font-weight: 900;
+text-decoration: none;
+}
+
+.music-link:hover {
+filter: brightness(1.08);
+}
+
+@media (max-width: 860px) {
+.hero,
+.detail-body {
+grid-template-columns: 1fr;
+}
+
+.hero {
+min-height: auto;
+}
+
+.hero-board {
+min-height: 300px;
+}
+
+.section-title {
+align-items: start;
+flex-direction: column;
+}
+
+.section-title p {
+text-align: left;
+}
+
+.detail {
+min-height: auto;
+}
+
+.member-list {
+grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.portrait {
+width: min(220px, 100%);
+}
+
+.case-file {
+grid-template-columns: 1fr;
+}
+
+.file-photo-panel {
+border-right: 0;
+border-bottom: 3px solid rgba(45, 51, 57, 0.24);
+}
+
+.portrait {
+width: 100%;
+min-height: 300px;
+}
+
+.secret-stamp {
+position: static;
+width: fit-content;
+margin: 0 52px 14px auto;
+}
+
+.detail-header {
+padding-right: 0;
+}
+}
+
+@media (max-width: 560px) {
+.site-shell {
+width: min(100% - 20px, 1180px);
+padding-top: 14px;
+}
+
+.tabs {
+overflow-x: auto;
+}
+
+.tab-button {
+flex: 0 0 auto;
+}
+
+.member-card {
+grid-template-rows: minmax(230px, 1fr) auto auto;
+min-height: 360px;
+}
+
+.avatar {
+min-height: 230px;
+}
+
+.member-list {
+grid-template-columns: 1fr;
+}
+
+.detail-body {
+padding: 12px;
+}
+
+.detail {
+padding: 10px;
+}
+
+.file-info-panel {
+padding: 18px;
+}
+
+.file-info-panel::before {
+display: none;
+}
+}
+</style>
+</head>
+<body>
+<main class="site-shell">
+<section class="hero" aria-labelledby="site-title">
+<div class="hero-copy">
+<p class="case-label">1990년대 중후반 · 성화시 성화관할서</p>
+<h1 id="site-title">미스터리 수사반</h1>
+<p class="subtitle">
+성화관할서의 특별수사팀. 잠뜰, 각별, 수현, 라더, 공룡, 덕개가
+기묘한 사건 기록과 증거, 그리고 말로 설명되지 않는 흔적을 추적한다.
+</p>
+</div>
+<div class="hero-board" aria-hidden="true">
+<div class="photo-strip">
+<div class="mini-photo"><img src="assets/gakbyeol.png" alt=""><span>Heptagram</span></div>
+<div class="mini-photo"><img src="assets/jamddeul.png" alt=""><span>Sleepground</span></div>
+<div class="mini-photo"><img src="assets/suhyeon.png" alt=""><span>SUHYEN</span></div>
+<div class="mini-photo"><img src="assets/radeo.png" alt=""><span>RATH4R</span></div>
+<div class="mini-photo"><img src="assets/gongryong.png" alt=""><span>ehdgh141</span></div>
+<div class="mini-photo"><img src="assets/deokgae.png" alt=""><span>DUCKGAE</span></div>
+</div>
+<div class="case-stamp">LIVE INDEX · 06</div>
+</div>
+</section>
+
+<nav class="tabs" aria-label="콘텐츠 탭">
+<button class="tab-button" type="button" aria-selected="true" data-tab="members">수사반</button>
+<button class="tab-button" type="button" aria-selected="false" data-tab="prologue">프롤로그</button>
+<button class="tab-button" type="button" aria-selected="false" data-tab="music">음악</button>
+</nav>
+
+<section class="tab-panel active" id="members">
+<div class="section-title">
+<h2>팀원 기록</h2>
+<p>인물 카드를 클릭하면 상세 프로필이 열립니다.</p>
+</div>
+<div class="member-layout">
+<div class="member-list" id="memberList" aria-label="미스터리 수사반 명단"></div>
+<article class="detail" id="memberDetail" aria-live="polite"></article>
+</div>
+</section>
+
+<section class="tab-panel" id="prologue">
+<div class="section-title">
+<h2>프롤로그</h2>
+<p>사건의 서막</p>
+</div>
+<div style="text-align: center; max-width: 100%; padding: 20px 0;">
+<img src="26-06-01 2016 2.jpg" alt="미스터리 수사반 2 프롤로그" style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
+</div>
+</section>
+
+<section class="tab-panel" id="music">
+<div class="section-title">
+<h2>음악</h2>
+<p>미스터리 수사반의 분위기와 함께 들을 추천 음악입니다.</p>
+</div>
+<div class="empty-panel">
+<div>
+<strong>추천 음악 - 정석플레이</strong>
+<span>일상의 효정 - 다정하게 태어난 사람들은 유난히 많이 다친다.</span>
+<br>
+<a class="music-link" href="https://youtu.be/0nfpo6XRefU?si=soReqfWt7Vl3yeC9" target="_blank" rel="noopener noreferrer">바로가기</a>
+<strong class="music-heading">추천 음악 - 자유플레이</strong>
+<span>일상의 효정 - 밀실, 미스테리ㅣ범인은 이 안에 있어 (Layton, Math and Physics Exams playlist/BGM)</span>
+<br>
+<a class="music-link" href="https://youtu.be/yatKu8DGhRs?si=9Ir7J6s-6_rMk973" target="_blank" rel="noopener noreferrer">바로가기</a>
+</div>
+</div>
+</section>
+</main>
+
+<script>
+const members = [
+{
+name: "잠뜰",
+gender: "여성",
+rank: "경위",
+age: "30세",
+mbti: "ISTJ",
+traits: ["정의", "이성적"],
+hair: "갈단발",
+eyes: "흑안",
+relation: "라더와 친한 동네 누나 동생 사이",
+past: "경찰대 수석 합격 후 어린 나이에 경위 자리에 올랐다는 이유로 과거의 석파 관할서 사람들에게 무시당함",
+ability: "프로파일러",
+abilityDetail: "사건의 재구성으로 확정적인 실증 파악",
+title: "차분한 실증의 중심",
+calls: "라더 → (사적) 반말, 라더야",
+hairColor: "#76503a",
+eyeColor: "#151515",
+accent: "#b9322f",
+image: "assets/jamddeul.png"
+},
+{
+name: "각별",
+gender: "남성",
+rank: "경위",
+age: "36세",
+mbti: "INTP",
+traits: ["능글", "귀차니즘"],
+hair: "흑장발",
+eyes: "황안",
+relation: "수현과 선후배 사이",
+past: "공업고 실업계 프리터 생활 중 심심하다는 이유로 순경 시험 지원 및 합격",
+ability: "메카닉",
+abilityDetail: "손재주를 이용하여 기계 및 잠금 해체나 조작",
+title: "느슨하게 잠금을 푸는 손",
+calls: "수현 → 반말, 토끼귀",
+hairColor: "#161819",
+eyeColor: "#d39a28",
+accent: "#365e9c",
+image: "assets/gakbyeol.png"
+},
+{
+name: "수현",
+gender: "남성",
+rank: "경위",
+age: "35세",
+mbti: "ENFP",
+traits: ["다정", "이타적"],
+hair: "흑단발(+토끼귀)",
+eyes: "등안",
+relation: "각별과 선후배 사이",
+past: "히어로를 동경하다 엄숙한 집안 분위기에서 살던 중 일탈 및 순경시험에 합격",
+ability: "언변가",
+abilityDetail: "공감 혹은 협박으로 심문 상대의 심리 파악 및 증거 수집",
+title: "마음을 여는 질문",
+calls: "각별 → 반존대, 선배",
+hairColor: "#171717",
+eyeColor: "#587b44",
+accent: "#587b44",
+rabbit: true,
+image: "assets/suhyeon.png"
+},
+{
+name: "라더",
+gender: "남성",
+rank: "경사",
+age: "29세",
+mbti: "ESFP",
+traits: ["열정적", "끈기"],
+hair: "적단발",
+eyes: "적안",
+relation: "잠뜰과 친한 동네 누나 동생 사이",
+past: "날치기범을 잡으려다가 실패했으나 끝내 잡아 시민상을 타고 순경시험 합격",
+ability: "행동대장",
+abilityDetail: "뛰어난 무력을 활용하여 망치 정의로 범인 제압 및 문 부숨",
+title: "현장을 밀고 들어가는 힘",
+calls: "공룡 → 반말, 공룡아 혹은 뇌쟁이 / 잠뜰 → (사적) 존대, 누님",
+hairColor: "#a1362d",
+eyeColor: "#b9322f",
+accent: "#d39a28",
+image: "assets/radeo.png"
+},
+{
+name: "공룡",
+gender: "남성",
+rank: "경사",
+age: "29세",
+mbti: "ESTP",
+traits: ["장난끼", "활발"],
+hair: "적단발",
+eyes: "적안",
+relation: "덕개와 사수 부사수 지간",
+past: "어린 시절 두뇌로 먹고 살며 매우 가난히 살다가 가난을 이겨내려 순경시험 합격",
+ability: "백과사전",
+abilityDetail: "명석한 두뇌로 원할 때에 언제든지 지식을 꺼내어 활용 및 기억",
+title: "기억에서 꺼내는 단서",
+calls: "덕개 → 반말, 덕개야 / 라더 → 반말, 라더야 혹은 힘쟁이",
+hairColor: "#a1362d",
+eyeColor: "#b9322f",
+accent: "#1e6c73",
+image: "assets/gongryong.png"
+},
+{
+name: "덕개",
+gender: "남성",
+rank: "경장",
+age: "27세",
+mbti: "ISFP",
+traits: ["소심", "차분"],
+hair: "연갈단발",
+eyes: "실눈",
+relation: "공룡과 사수 부사수 지간",
+past: "시골 출신, 부모가 화재 사고로 사망 후 영혼과 대화 가능하게 됨. 이후 할머니와 함께 살다가 순경시험 합격",
+ability: "식스센스",
+abilityDetail: "직감/과거/예민/통찰(+초감각)이라는 유령들의 조언에 따라 추리 및 영혼과의 대화",
+title: "보이지 않는 증언",
+calls: "공룡 → 반존대",
+hairColor: "#b88958",
+eyeColor: "#1e2328",
+accent: "#8a6b47",
+image: "assets/deokgae.png"
+}
+];
+
+const memberList = document.querySelector("#memberList");
+const memberDetail = document.querySelector("#memberDetail");
+const displayOrder = ["각별", "잠뜰", "수현", "라더", "공룡", "덕개"];
+const orderedMembers = displayOrder.map((name) => members.find((member) => member.name === name));
+
+function avatarClass(member) {
+return ["avatar", member.rabbit ? "rabbit" : "", member.image ? "has-image" : ""].filter(Boolean).join(" ");
+}
+
+function styleVars(member) {
+return `--hair:${member.hairColor}; --eye:${member.eyeColor}; --accent:${member.accent};`;
+}
+
+function closeDetail() {
+memberDetail.classList.remove("open");
+memberDetail.innerHTML = "";
+document.body.classList.remove("modal-open");
+document.querySelectorAll(".member-card").forEach((card) => {
+card.classList.remove("active");
+card.setAttribute("aria-pressed", "false");
+});
+}
+
+function selectMember(index) {
+const member = orderedMembers[index];
+document.querySelectorAll(".member-card").forEach((card, cardIndex) => {
+card.classList.toggle("active", cardIndex === index);
+card.setAttribute("aria-pressed", String(cardIndex === index));
+});
+
+memberDetail.style.setProperty("--hair", member.hairColor);
+memberDetail.style.setProperty("--eye", member.eyeColor);
+memberDetail.style.setProperty("--accent", member.accent);
+memberDetail.classList.add("open");
+document.body.classList.add("modal-open");
+memberDetail.innerHTML = `
+<div class="case-file" role="dialog" aria-modal="true" aria-label="${member.name} 상세 기록">
+<button class="file-close" type="button" aria-label="상세 기록 닫기">×</button>
+<aside class="file-photo-panel">
+<div class="photo-frame">
+<div class="portrait ${member.rabbit ? "rabbit" : ""} ${member.image ? "has-image" : ""}" aria-label="${member.name} 이미지">
+${member.image ? `<img src="${member.image}" alt="${member.name}">` : ""}
+</div>
+<span class="photo-name">${member.name}</span>
+</div>
+<div class="evidence-number">SEONGHWA-${String(index + 1).padStart(2, "0")} · ACTIVE UNIT</div>
+</aside>
+<section class="file-info-panel">
+<div class="secret-stamp">CASE VIEWER</div>
+<div class="detail-header">
+<p class="badge-line">${member.rank} · ${member.mbti}</p>
+<h3>${member.name}</h3>
+<div class="tags">
+<span class="tag">${member.gender}</span>
+<span class="tag">${member.age}</span>
+<span class="tag">${member.traits[0]}</span>
+<span class="tag">${member.traits[1]}</span>
+</div>
+</div>
+<div class="detail-body">
+<div class="fact">
+<span class="fact-label">HAIR / EYE</span>
+<p class="fact-value">${member.hair} · ${member.eyes}</p>
+</div>
+<div class="fact">
+<span class="fact-label">RELATION</span>
+<p class="fact-value">${member.relation}</p>
+</div>
+<div class="fact">
+<span class="fact-label">ROLE / POSITION</span>
+<p class="fact-value">${member.rank} · ${member.mbti}</p>
+</div>
+<div class="fact">
+<span class="fact-label">SPECIAL ABILITY</span>
+<p class="fact-value"><strong>${member.ability}</strong> - ${member.abilityDetail}</p>
+</div>
+<div class="fact wide">
+<span class="fact-label">PAST RECORD</span>
+<p class="fact-value">${member.past}</p>
+</div>
+<div class="fact wide">
+<span class="fact-label">CALL SIGN</span>
+<p class="fact-value">${member.calls}</p>
+</div>
+<div class="fact wide">
+<span class="fact-label">PERSONALITY PROFILE</span>
+<p class="fact-value">${member.title} · ${member.traits.join(" + ")}</p>
+</div>
+</div>
+</section>
+</div>
+`;
+memberDetail.querySelector(".file-close").addEventListener("click", closeDetail);
+}
+
+orderedMembers.forEach((member, index) => {
+const button = document.createElement("button");
+button.type = "button";
+button.className = "member-card";
+button.setAttribute("aria-pressed", "false");
+button.innerHTML = `
+<span class="${avatarClass(member)}" style="${styleVars(member)}" aria-hidden="true">
+${member.image ? `<img src="${member.image}" alt="">` : ""}
+</span>
+<span>
+<span class="member-name">${member.name}</span>
+<span class="member-summary">${member.rank} · ${member.age} · ${member.mbti}<br>${member.ability} / ${member.traits.join(" · ")}</span>
+</span>
+<span class="arrow" aria-hidden="true">›</span>
+`;
+button.addEventListener("click", () => selectMember(index));
+memberList.appendChild(button);
+});
+
+document.querySelectorAll(".tab-button").forEach((tab) => {
+tab.addEventListener("click", () => {
+closeDetail();
+const target = tab.dataset.tab;
+document.querySelectorAll(".tab-button").forEach((button) => {
+button.setAttribute("aria-selected", String(button === tab));
+});
+document.querySelectorAll(".tab-panel").forEach((panel) => {
+panel.classList.toggle("active", panel.id === target);
+});
+});
+});
+
+memberDetail.addEventListener("click", (event) => {
+if (event.target === memberDetail) {
+closeDetail();
+}
+});
+
+document.addEventListener("keydown", (event) => {
+if (event.key === "Escape" && memberDetail.classList.contains("open")) {
+closeDetail();
+}
+});
+</script>
+</body>
+</html>
